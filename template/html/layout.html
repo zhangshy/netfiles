@@ -1,0 +1,14 @@
+{{define "layout"}}
+<html>
+	<head>
+		{{with .Title}}
+		<title>{{.}}</title>
+		{{else}}
+		<title>test</title>
+		{{end}}
+	</head>
+	<body>
+		{{template "body" .}}
+	</body>
+</html>
+{{end}}

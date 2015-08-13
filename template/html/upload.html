@@ -1,16 +1,12 @@
-<html>  
-	<title>文件上传</title>
-    <head>  
-    </head>  
-    <body>  
-    	{{with .}}
-    		<script>
-			alert({{.}});
-			</script>
-    	{{end}}
-    	<form action="upload" method="post" enctype="multipart/form-data">
-            <input type="file" name="file" value="" /> 
-            <input type="submit" name="submit" value="确认" />
-        </form>
-    </body>  
-</html>  
+{{define "body"}}  
+	{{with .Ret}}
+		<script>
+		alert({{.}});
+		</script>
+	{{end}}
+	<form action="upload" method="post" enctype="multipart/form-data">
+        <input type="file" name="file" value="" /> 
+        <input type="submit" name="submit" value="确认" />
+    </form>
+{{end}}
+  
