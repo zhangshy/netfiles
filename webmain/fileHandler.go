@@ -8,7 +8,7 @@ import (
 )
 
 func fileHandler(w http.ResponseWriter, r *http.Request) {
-	filenames, _ := fileutil.GetCurrentDirFiles("D:\\lqbz\\test\\go")
+	filenames, _ := fileutil.GetCurrentDirFiles(browsePath)
 	t, err := template.ParseFiles("template/html/browse.html")
 	if err != nil {
 		log.Println(err)
