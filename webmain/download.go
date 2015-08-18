@@ -19,6 +19,7 @@ func downloadHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println(err)
 	}
 	file, err := os.OpenFile(filepath.Join(browsePath, filename), os.O_RDONLY, 0666)
+	defer file.Close()
 	if err != nil {
 		log.Println(err)
 		io.WriteString(w, err.Error())

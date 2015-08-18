@@ -1,12 +1,19 @@
-{{define "body"}}  
-	{{with .Ret}}
-		<script>
-		alert({{.}});
-		</script>
-	{{end}}
-	<form action="upload" method="post" enctype="multipart/form-data">
-        <input type="file" name="file" value="" /> 
-        <input type="submit" name="submit" value="确认" />
+{{define "body"}}
+  <title>文件上传</title>
+  <div class="container-fluid">   
+  	{{with .Ret}}
+  		<script>
+  		alert({{.}});
+  		</script>
+  	{{end}}
+  	<form action="upload" method="post" enctype="multipart/form-data">
+      <div class="form-group">
+        <input type="file" name="file" value="">
+      </div>
+      <div class="form-group">
+        <input type="submit" name="submit" value="确认">
+      </div>
     </form>
+  </div>
 {{end}}
   
