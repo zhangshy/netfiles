@@ -10,26 +10,19 @@
     <link href="http://apps.bdimg.com/libs/bootstrap/3.3.4/css/bootstrap.css" rel="stylesheet">
   </head>
   <body>
-    <h1>Hello World!</h1>
-    <p id="filelists"></p>
+    <div class="container-fluid">  
+      <h1>Hello World!</h1>
+      <div id="filelists"></div>
+      <form enctype="multipart/form-data">
+        <input name="file" type="file" />
+        <input type="button" value="Upload" id="upload">
+      </form>
+      <progress></progress>
+    </div>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script>
-    $(document).ready(function(){
-      $.ajax({
-        url: 'getfiles',
-        type: 'GET',
-        data: {browsePath:'D:\\BaiduYunDownload'},
-        success: function(data) {
-          $("#filelists").html(data);
-        },
-        error: function(xhr, status, err) {
-          alert("error!")
-        }
-      });
-    });
-    </script>
+    <script src="/js/index.js"></script>
   </body>
 </html>
