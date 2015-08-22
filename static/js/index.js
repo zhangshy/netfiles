@@ -4,6 +4,7 @@ function progressHandlingFunction(e){
     }
   }
 $(document).ready(function(){
+  $("progress").hide();
   $('#upload').click(function(){
     var formData = new FormData($('form')[0]);
     $.ajax({
@@ -17,9 +18,9 @@ $(document).ready(function(){
             return myXhr;
         },
         //Ajax events
-        beforeSend: function () {console.log("beforeSend")},
+        beforeSend: function () {console.log("beforeSend");$("progress").show();},
         success: function() {console.log("upload success")},
-        error: function() {alert("error")},
+        error: function() {$("progress").hide();alert("error")},
         // Form data
         data: formData,
         //Options to tell jQuery not to process data or worry about content-type.
@@ -54,7 +55,6 @@ var FileinfoBox = React.createClass({
   render: function() {
     return (
       <div className="fileinfoBox">
-        <h1>FileinfoBox</h1>
         <FileinfoList data={this.state.data} />
       </div>
     );
@@ -81,7 +81,7 @@ var FileinfoList = React.createClass({
 
 var FileinfoItem = React.createClass({
   render: function() {
-    var urlpath = "/download/?file=" + this.props.path;
+    var urlpath = "/download?file=" + this.props.path;
     return (
       <div className="fileinfoItem">
         <li><a href={urlpath}> {this.props.name} </a></li>

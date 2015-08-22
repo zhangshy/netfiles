@@ -9,6 +9,7 @@ func main() {
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./static/js"))))
 	http.HandleFunc("/getfiles", handlegetfiles)
 	http.HandleFunc("/upload", uploadHandler)
+	http.HandleFunc("/download", downloadHandler)
 	log.Println("Server started: http://localhost:" + port)
 	log.Fatal(http.ListenAndServe(":"+port, nil))
 }

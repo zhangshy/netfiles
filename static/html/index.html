@@ -14,10 +14,14 @@
       <h1>Hello World!</h1>
       <div id="fileinfos"></div>
       <form enctype="multipart/form-data">
-        <input name="file" type="file" />
-        <input type="button" value="Upload" id="upload">
+        <div class="form-group">
+          <input name="file" type="file" />
+        </div>
+        <div class="form-group">
+          <input type="button" value="Upload" id="upload">
+          <progress></progress>
+        </div>
       </form>
-      <progress></progress>
     </div>
     <script src="/js/react-0.13.3/react.js"></script>
     <script src="/js/react-0.13.3/JSXTransformer.js"></script>
