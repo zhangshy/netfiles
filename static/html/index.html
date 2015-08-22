@@ -12,17 +12,19 @@
   <body>
     <div class="container-fluid">  
       <h1>Hello World!</h1>
-      <div id="filelists"></div>
+      <div id="fileinfos"></div>
       <form enctype="multipart/form-data">
         <input name="file" type="file" />
         <input type="button" value="Upload" id="upload">
       </form>
       <progress></progress>
     </div>
+    <script src="/js/react-0.13.3/react.js"></script>
+    <script src="/js/react-0.13.3/JSXTransformer.js"></script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="http://apps.bdimg.com/libs/jquery/1.9.1/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <script src="/js/index.js"></script>
+    <script type="text/jsx;harmony=true" src="/js/index.js"></script>
   </body>
 </html>

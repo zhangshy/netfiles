@@ -17,8 +17,8 @@ $(document).ready(function(){
             return myXhr;
         },
         //Ajax events
-        //beforeSend: function () {alert("beforeSend")},
-        //success: function() {alert("success")},
+        beforeSend: function () {console.log("beforeSend")},
+        success: function() {console.log("upload success")},
         error: function() {alert("error")},
         // Form data
         data: formData,
@@ -28,15 +28,69 @@ $(document).ready(function(){
         processData: false
     });
   });
-  $.ajax({
-    url: 'getfiles',
-    type: 'GET',
-    data: {browsePath:'D:\\BaiduYunDownload'},
-    success: function(data) {
-      $("#filelists").html(data);
-    },
-    error: function(xhr, status, err) {
-      alert("error!")
-    }
-  });
 });
+
+// HTML元素的名称以小写字母开头，React class的名称以大写字母开头
+var FileinfoBox = React.createClass({
+  getInitialState: function() {
+    return {data: []};
+  },
+  componentDidMount: function() {
+    $.ajax({
+      url: this.props.url,
+      type: 'GET',
+      data: {browsePath: this.props.browsePath},
+      dataType: 'json',
+      cache: false,
+      success: function(data) {
+        console.log(data)
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+  render: function() {
+    return (
+      <div className="fileinfoBox">
+        <h1>FileinfoBox</h1>
+        <FileinfoList data={this.state.data} />
+      </div>
+    );
+  }
+});
+
+var FileinfoList = React.createClass({
+  render: function() {
+    var fileNodes = this.props.data.map(function(fileinfo) {
+      return (
+        <FileinfoItem name={fileinfo.name} path={fileinfo.path}></FileinfoItem>
+      );
+    });
+    return (
+      <div className="fileinfoList">
+        <ul>
+          {fileNodes}
+        </ul>
+      </div>
+    );
+  }
+});
+
+
+var FileinfoItem = React.createClass({
+  render: function() {
+    var urlpath = "/download/?file=" + this.props.path;
+    return (
+      <div className="fileinfoItem">
+        <li><a href={urlpath}> {this.props.name} </a></li>
+      </div>
+    );
+  }
+});
+
+React.render(
+  <FileinfoBox url="getfiles" browsePath="E:\\Youku Files\\transcode"/>,
+  document.getElementById('fileinfos')
+);
