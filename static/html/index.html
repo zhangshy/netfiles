@@ -11,17 +11,26 @@
   </head>
   <body>
     <div class="container-fluid">  
-      <h1>Hello World!</h1>
       <div id="fileinfos"></div>
-      <form enctype="multipart/form-data">
-        <div class="form-group">
-          <input name="file" type="file" />
+      <div id="upload_div" class="col-xs-12 col-md-6">
+        <div class="alert alert-warning alert-dismissible" role="alert" id="upload_alert_warn">
+          <button type="button" class="close" aria-label="Close" id="upload_alert_warn_close"><span aria-hidden="true">&times;</span></button>
+          请选择文件
         </div>
-        <div class="form-group">
-          <input type="button" value="Upload" id="upload">
-          <progress></progress>
+        <div class="alert alert-warning alert-dismissible" role="alert" id="upload_alert_ok">
+          <button type="button" class="close" aria-label="Close" id="upload_alert_ok_close"><span aria-hidden="true">&times;</span></button>
+          上传成功
         </div>
-      </form>
+        <form enctype="multipart/form-data">
+          <div class="form-group">
+            <input name="file" type="file" id="file" />
+          </div>
+          <div class="form-group">
+            <input type="button" value="Upload" id="upload">
+            <progress></progress>
+          </div>
+        </form>
+      </div>
     </div>
     <script src="/js/react-0.13.3/react.js"></script>
     <script src="/js/react-0.13.3/JSXTransformer.js"></script>

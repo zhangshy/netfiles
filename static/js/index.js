@@ -5,8 +5,24 @@ function progressHandlingFunction(e){
   }
 $(document).ready(function(){
   $("progress").hide();
+  $(".alert").hide();
+  $('#file').change(function(){
+    var file = this.files[0];
+    var name = file.name;
+    var size = file.size;
+    var type = file.type;
+    $("#upload_alert_warn").hide();
+    $("#upload_alert_ok").hide();
+    //Your validation
+  });
   $('#upload').click(function(){
     var formData = new FormData($('form')[0]);
+    var filename = $("#file").val();
+    if (filename.length==0) {
+      console.log("输入文件为空");
+      $("#upload_alert_warn").show();
+      return;
+    }
     $.ajax({
         url: 'upload',  //Server script to process data
         type: 'POST',
@@ -18,8 +34,13 @@ $(document).ready(function(){
             return myXhr;
         },
         //Ajax events
-        beforeSend: function () {console.log("beforeSend");$("progress").show();},
-        success: function() {console.log("upload success")},
+        beforeSend: function () {
+            console.log("beforeSend");
+            $("progress").show();},
+        success: function() {
+          console.log("upload success");
+          $("#upload_alert_ok").show();
+        },
         error: function() {$("progress").hide();alert("error")},
         // Form data
         data: formData,
@@ -28,6 +49,12 @@ $(document).ready(function(){
         contentType: false,
         processData: false
     });
+  });
+  $('#upload_alert_warn_close').click(function() {
+    $('#upload_alert_warn').hide();
+  });
+  $('#upload_alert_ok_close').click(function() {
+    $('#upload_alert_ok').hide();
   });
 });
 
@@ -91,6 +118,6 @@ var FileinfoItem = React.createClass({
 });
 
 React.render(
-  <FileinfoBox url="getfiles" browsePath="E:\\Youku Files\\transcode"/>,
+  <FileinfoBox url="getfiles" browsePath="./files"/>,
   document.getElementById('fileinfos')
 );
