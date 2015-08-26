@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>文件浏览</title>
+  <link rel="stylesheet" href="/js/jstree-3.2.1/themes/default/style.min.css">
+</head>
+<body>
+  <div id="jstree_demo_div">
+    <ul>
+      <li id="node_1">Root node 1
+        <ul>
+          <li>Child node 1</li>
+          <li><a href="#">Child node 2</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+  <h2>using json</h1>
+  <div id="using_json"></div>
+  <h2>using json2</h1>
+  <div id="using_json2"></div>
+  <h2>using axax</h1>
+  <div id="using_ajax"></div>
+  <script src="/js/jquery/1.11.3/jquery.min.js"></script>
+  <script src="/js/jstree-3.2.1/jstree.min.js"></script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+      $('#jstree_demo_div').jstree();
+      $('#jstree_demo_div').on("changed.jstree", function (e, data) {
+        console.log(data.selected);
+      });
+      $('#using_json').jstree({ 'core' : {
+          'data' : [
+             'Simple root node',
+             {
+               'text' : 'Root node 2',
+               'state' : {
+                 'opened' : true,
+                 'selected' : true
+               },
+               'children' : [
+                 { 'text' : 'Child 1' },
+                 'Child 2'
+               ]
+            }
+          ]
+      } });
+      $('#using_json2').jstree({ 'core' : {
+          'data' : [
+             { "id" : "ajson1", "parent" : "#", "text" : "Simple root node" },
+             { "id" : "ajson2", "parent" : "#", "text" : "Root node 2" },
+             { "id" : "ajson3", "parent" : "ajson2", "text" : "Child 1" },
+             { "id" : "ajson4", "parent" : "ajson2", "text" : "Child 2" },
+          ]
+      } });
+      $('#using_ajax').jstree({
+        'core' : {
+          'data' : {
+            'url' : "/tree_file",
+            "dataType" : "json",
+            'data' : function (node) {
+              console.log("using_ajax node id: " + node.id)
+              if (node.id==='#') {
+                return { 'id' : "D:\\BaiduYunDownload" };
+              } else {
+                return { 'id' : node.id };
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
