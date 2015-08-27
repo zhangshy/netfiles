@@ -7,6 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"path/filepath"
 )
 
 // type filetree struct {
@@ -20,29 +21,43 @@ type treestate struct {
 	Selected bool `json:"selected"`
 }
 
+// 使用,omitempty如果是空的话在生成json时就不生成
+// http://stackoverflow.com/questions/17306358/golang-removing-fields-from-struct-or-hiding-them-in-json-response
+// 使用map生成nested json
 type filetree struct {
-	Id       string     `json:"id"`
-	Text     string     `json:"text"`
-	Icon     string     `json:"icon"`
-	State    *treestate `json:"state"`
-	Children []string   `json:"children"`
-	Li_attr  string     `json:"li_attr"`
-	A_attr   string     `json:"a_attr"`
+	Id       string            `json:"id"`
+	Text     string            `json:"text"`
+	Icon     string            `json:"icon,omitempty"`
+	State    *treestate        `json:"state,omitempty"`
+	Children bool              `json:"children,omitempty"`
+	Li_attr  map[string]string `json:"li_attr,omitempty"`
+	A_attr   map[string]string `json:"a_attr,omitempty"`
 }
 
 func treeFileHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	filepath := r.Form["id"][0]
-	log.Println("filepath:" + filepath)
+	dirpath := r.Form["id"][0]
+	log.Println("dirpath:" + dirpath)
 	filetrees := make([]filetree, 0)
-	fileinfos, err := ioutil.ReadDir(filepath)
+	fileinfos, err := ioutil.ReadDir(dirpath)
 	if err != nil {
-		log.Println("ReadDir error!" + filepath)
+		log.Println("ReadDir error!" + dirpath)
 	}
 	for _, info := range fileinfos {
 		tree := filetree{}
-		tree.Id = info.Name()
+		// 使用文件路径作为id
+		tree.Id = filepath.Join(dirpath, info.Name())
 		tree.Text = info.Name()
+		if info.IsDir() {
+			// 是文件夹
+			tree.Icon = "jstree-folder"
+			tree.Children = true
+		} else {
+			// Use the rel attribute
+			// http://stackoverflow.com/questions/4899520/jstree-types-plugin-does-not-display-custom-icons
+			// tree.Li_attr = map[string]string{"rel": "file"}
+			tree.Icon = "jstree-file"
+		}
 		filetrees = append(filetrees, tree)
 	}
 
