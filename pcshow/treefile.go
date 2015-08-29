@@ -8,12 +8,8 @@ import (
 	"log"
 	"net/http"
 	"path/filepath"
+	"strings"
 )
-
-// type filetree struct {
-// 	Id   string `json:"id"`
-// 	Text string `json:"text"`
-// }
 
 type treestate struct {
 	Opened   bool `json:"opened"`
@@ -21,9 +17,9 @@ type treestate struct {
 	Selected bool `json:"selected"`
 }
 
-// 使用,omitempty如果是空的话在生成json时就不生成
+// 1. 使用,omitempty如果是空的话在生成json时就不生成
 // http://stackoverflow.com/questions/17306358/golang-removing-fields-from-struct-or-hiding-them-in-json-response
-// 使用map生成nested json
+// 2. 使用map[string]string生成nested json
 type filetree struct {
 	Id       string            `json:"id"`
 	Text     string            `json:"text"`
@@ -38,6 +34,11 @@ func treeFileHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	dirpath := r.Form["id"][0]
 	log.Println("dirpath:" + dirpath)
+	if strings.HasPrefix(dirpath, "C:") {
+		log.Println("Windows C do not browse!")
+		io.WriteString(w, "[{\"text\" : \"Do not use C:\"}]")
+		return
+	}
 	filetrees := make([]filetree, 0)
 	fileinfos, err := ioutil.ReadDir(dirpath)
 	if err != nil {
@@ -57,6 +58,14 @@ func treeFileHandler(w http.ResponseWriter, r *http.Request) {
 			// http://stackoverflow.com/questions/4899520/jstree-types-plugin-does-not-display-custom-icons
 			// tree.Li_attr = map[string]string{"rel": "file"}
 			tree.Icon = "jstree-file"
+			// 设置文件的href
+			tree.A_attr = map[string]string{"href": "/download?file=" + tree.Id}
+		}
+
+		// 如果文件名为test的话，就选中这个文件
+		if info.Name() == "test" {
+			state := &treestate{Selected: true}
+			tree.State = state
 		}
 		filetrees = append(filetrees, tree)
 	}
