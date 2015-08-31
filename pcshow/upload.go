@@ -10,12 +10,13 @@ import (
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
 	log.Println("upload enter")
+
 	r.ParseForm()
 	file, handle, err := r.FormFile("file")
 	if err != nil {
 		log.Println(err)
 	}
-	f, err := os.OpenFile(filepath.Join("files", handle.Filename), os.O_WRONLY|os.O_CREATE, 0666)
+	f, err := os.OpenFile(filepath.Join(uploadFilePath, handle.Filename), os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
 	}

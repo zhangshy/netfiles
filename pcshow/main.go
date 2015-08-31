@@ -1,10 +1,21 @@
 package main
 
-import "log"
-import "net/http"
+import (
+	"log"
+	"net/http"
+	"os"
+)
+
+// 全局变量不能使用:=
+var uploadFilePath string
 
 func main() {
 	port := "80"
+	uploadFilePath = "./files"
+	if os.MkdirAll(uploadFilePath, 0766) != nil {
+		log.Println("create " + uploadFilePath + " error!")
+		return
+	}
 	http.Handle("/", http.FileServer(http.Dir("./static/html")))
 	http.Handle("/js/", http.StripPrefix("/js/", http.FileServer(http.Dir("./static/js"))))
 	http.Handle("/test/", http.StripPrefix("/test/", http.FileServer(http.Dir("./static/test"))))
