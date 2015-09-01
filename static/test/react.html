@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+  <title></title>
+  
+  <!-- Bootstrap -->
+  <link href="/js/bootstrap-3.3.5/css/bootstrap.css" rel="stylesheet">
+</head>
+<body>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xs-3 col-md-1" id="side_bar">
+      <input class="btn btn-default" type="button" value="文件浏览" id="file_browse"><br/>
+      <input class="btn btn-default" type="button" value="文件上传" id="file_upload">
+    </div>
+    <div class="col-xs-9 col-md-6" id="reply_content">
+      
+    </div>
+  </div>
+</div>
+
+
+<script src="/js/react-0.13.3/react.js"></script>
+<script src="/js/react-0.13.3/JSXTransformer.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="/js/\jquery/2.1.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="/js/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+
+<script type="text/jsx;harmony=true">
+  var HelloMessage = React.createClass({
+    render: function() {
+      return <div>Hello {this.props.name}</div>;
+    }
+  });
+
+  // 上传文件参考
+  // http://stackoverflow.com/questions/28750489/upload-file-component-with-reactjs
+  var FileUpload = React.createClass({
+    handleSubmit: function(e) {
+      e.preventDefault();
+      var formData = new FormData();
+      formData.append( 'file', this.refs.file.getDOMNode().files[0] );
+      var filename = React.findDOMNode(this.refs.file).value.trim();
+      console.log("filename:" + filename);
+      if (filename.length==0) {
+        console.log("输入文件为空");
+        return;
+      }
+      $.ajax({
+        url: '/upload',  //Server script to process data
+        type: 'POST',
+        //Ajax events
+        beforeSend: function () {
+            console.log("beforeSend");}.bind(this),
+        success: function() {
+          console.log("upload success");
+        }.bind(this),
+        error: function() {alert("error")}.bind(this),
+        // Form data
+        data: formData,
+        //Options to tell jQuery not to process data or worry about content-type.
+        cache: false,
+        contentType: false,
+        processData: false
+      });
+    },
+    render: function() {
+      return (
+        <div className="fileUpload">
+          <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
+            <div className="form-group">
+              <input name="file" type="file" ref="file" />
+            </div>
+            <div className="form-group">
+              <input type="submit" value="Upload" ref="do_upload" />
+            </div>
+          </form>
+        </div>
+      );
+    }
+  });
+
+  $(document).ready(function() {
+    $('#file_browse').click(function() {
+      React.render(
+        <HelloMessage name="file_browse" />,
+        document.getElementById('reply_content')
+      );
+    });
+    $('#file_upload').click(function() {
+      React.render(
+        <FileUpload />,
+        document.getElementById('reply_content')
+      );
+    });
+  });
+</script>
+</body>
+</html>
