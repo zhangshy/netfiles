@@ -9,18 +9,20 @@ import (
 )
 
 func uploadHandler(w http.ResponseWriter, r *http.Request) {
-	log.Println("upload enter")
-
 	r.ParseForm()
 	file, handle, err := r.FormFile("file")
 	if err != nil {
 		log.Println(err)
+		w.WriteHeader(http.StatusBadRequest)
+		return
 	}
+	defer file.Close()
 	f, err := os.OpenFile(filepath.Join(uploadFilePath, handle.Filename), os.O_WRONLY|os.O_CREATE, 0666)
 	if err != nil {
 		log.Println(err)
+		w.WriteHeader(http.StatusForbidden)
+		return
 	}
 	defer f.Close()
-	defer file.Close()
 	io.Copy(f, file)
 }

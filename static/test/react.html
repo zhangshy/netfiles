@@ -27,7 +27,7 @@
 <script src="/js/react-0.13.3/react.js"></script>
 <script src="/js/react-0.13.3/JSXTransformer.js"></script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="/js/\jquery/2.1.4/jquery.min.js"></script>
+<script src="/js/jquery/2.1.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/js/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 
@@ -54,13 +54,24 @@
       $.ajax({
         url: '/upload',  //Server script to process data
         type: 'POST',
+        xhr: function() {  // Custom XMLHttpRequest
+            var myXhr = $.ajaxSettings.xhr();
+            if(myXhr.upload){ // Check if upload property exists
+                myXhr.upload.addEventListener('progress', function(e) {
+                  if(e.lengthComputable){
+                    console.log(e.loaded);
+                    $('progress').attr({value:e.loaded,max:e.total});
+                }}, false); // For handling the progress of the upload
+            }
+            return myXhr;
+        },
         //Ajax events
         beforeSend: function () {
             console.log("beforeSend");}.bind(this),
         success: function() {
           console.log("upload success");
         }.bind(this),
-        error: function() {alert("error")}.bind(this),
+        error: function(xhr, status, err) {alert("error")}.bind(this),
         // Form data
         data: formData,
         //Options to tell jQuery not to process data or worry about content-type.
@@ -79,6 +90,7 @@
             <div className="form-group">
               <input type="submit" value="Upload" ref="do_upload" />
             </div>
+            <progress value="0"></progress>
           </form>
         </div>
       );
