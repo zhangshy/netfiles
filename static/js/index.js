@@ -1,9 +1,18 @@
 
 var BrowseFile = React.createClass({
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var input = this.refs.pathName.getDOMNode().value;
+    console.log(input);
+  },
   render: function() {
     return(
       <div className="browseFile">
-        This is BrowseFile!
+        <form onSubmit={this.handleSubmit} >
+          <input type="text" name="pathName" placeholder="请输入要浏览的文件路径" required="required" ref="pathName" />
+          <input type="submit" value="确定" />
+        </form>
+        <div ref="tree_using_ajax"></div>
       </div>
     );
   }
@@ -56,7 +65,7 @@ var UploadFile = React.createClass({
       <div className="uploadFile">
         <form encType="multipart/form-data" onSubmit={this.handleSubmit}>
           <div className="form-group">
-            <input name="file" type="file" ref="file" />
+            <input name="file" type="file" required="required" ref="file" />
           </div>
           <div className="form-group">
             <input type="submit" value="Upload" ref="do_upload" />
@@ -73,14 +82,9 @@ var SideBar = React.createClass({
     this.setState({actived: e});
     this.props.onInputClick(e);
   },
-  getInitialState: function() {
-    return {
-      actived: "BrowseFile"
-    };
-  },
   render: function() {
-    var browseName = this.state.actived=="BrowseFile" ? "btn btn-primary active" : "btn btn-default";
-    var uploadName = this.state.actived=="UploadFile" ? "btn btn-primary active" : "btn btn-default";
+    var browseName = this.props.actived=="BrowseFile" ? "btn btn-primary active" : "btn btn-default";
+    var uploadName = this.props.actived=="UploadFile" ? "btn btn-primary active" : "btn btn-default";
     return (
       <div className="sideBar col-xs-3 col-md-1">
         <input className={browseName} type="button" value="文件浏览" onClick={this.handleChange.bind(this, "BrowseFile")} /><br/>
@@ -115,7 +119,7 @@ var NetFile = React.createClass({
   render: function() {
     return (
       <div className="netFile row">
-        <SideBar onInputClick={this.handleInputClick} />
+        <SideBar onInputClick={this.handleInputClick} actived={this.state.inputName} />
         <MenuResponse inputName={this.state.inputName} />
       </div>
     );
