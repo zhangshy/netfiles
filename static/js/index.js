@@ -2,8 +2,32 @@
 var BrowseFile = React.createClass({
   handleSubmit: function(e) {
     e.preventDefault();
-    var input = this.refs.pathName.getDOMNode().value;
-    console.log(input);
+    root = this.refs.pathName.getDOMNode().value;
+    console.log(root);
+    if (root.substring(0, 2).toLowerCase()=="C:".toLowerCase()) {
+      alert("不允许浏览C盘");
+      return;
+    }
+    // 使用jquery参考
+    // http://stackoverflow.com/questions/25436445/using-jquery-plugins-that-transform-the-dom-in-react-components
+    var $tree = $(this.refs.tree_using_ajax.getDOMNode());
+    $tree.jstree("refresh"); // 刷新jstree
+    $tree.jstree({
+      'core' : {
+        'data' : {
+          'url' : "/tree_file",
+          "dataType" : "json",
+          'data' : function (node) {
+            console.log("using_ajax node id: " + node.id + " root:" + root)
+            if (node.id==='#') {
+              return { 'id' : root };
+            } else {
+              return { 'id' : node.id };
+            }
+          }
+        }
+      }
+    });
   },
   render: function() {
     return(
@@ -12,7 +36,7 @@ var BrowseFile = React.createClass({
           <input type="text" name="pathName" placeholder="请输入要浏览的文件路径" required="required" ref="pathName" />
           <input type="submit" value="确定" />
         </form>
-        <div ref="tree_using_ajax"></div>
+        <div ref="tree_using_ajax" ></div>
       </div>
     );
   }
