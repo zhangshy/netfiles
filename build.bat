@@ -3,5 +3,5 @@
 ::xcopy %GOPATH%\src\netfiles\template_webmain %GOPATH%\bin\template /e
 :: "||"作用，当||前命令执行失败时才执行||后的命令
 go install netfiles\pcshow || pause
-xcopy %GOPATH%\src\netfiles\static %GOPATH%\bin\pcshow\static /e /Y
-move %GOPATH%\bin\pcshow.exe %GOPATH%\bin\pcshow\
+xcopy %GOPATH%\src\netfiles\static %GOPATH%\bin\netfiles\static /e /Y
+move %GOPATH%\bin\pcshow.exe %GOPATH%\bin\netfiles\
