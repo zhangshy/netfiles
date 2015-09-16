@@ -107,12 +107,14 @@ var SideBar = React.createClass({
     this.props.onInputClick(e);
   },
   render: function() {
-    var browseName = this.props.actived=="BrowseFile" ? "btn btn-primary active" : "btn btn-default";
-    var uploadName = this.props.actived=="UploadFile" ? "btn btn-primary active" : "btn btn-default";
+    var browseName = this.props.actived=="BrowseFile" ? "active" : "";
+    var uploadName = this.props.actived=="UploadFile" ? "active" : "";
     return (
       <div className="sideBar col-xs-3 col-md-1">
-        <input className={browseName} type="button" value="文件浏览" onClick={this.handleChange.bind(this, "BrowseFile")} /><br/>
-        <input className={uploadName} type="button" value="文件上传" onClick={this.handleChange.bind(this, "UploadFile")} />
+        <ul className="nav nav-pills nav-stacked">
+          <li role="presentation" className={browseName} onClick={this.handleChange.bind(this, "BrowseFile")} ><a href="#">文件浏览</a></li>
+          <li role="presentation" className={uploadName} onClick={this.handleChange.bind(this, "UploadFile")} ><a href="#">文件上传</a></li>
+        </ul>
       </div>
     );
   }
